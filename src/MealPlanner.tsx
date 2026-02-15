@@ -1,9 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { Shuffle, ShoppingCart, Plus, X, RefreshCw, Save, Edit } from 'lucide-react';
 
+interface Meal {
+  name: string;
+  ingredients: string[];
+}
+
 const MealPlanner = () => {
   // Your historic meals
-  const sampleMeals = [
+  const sampleMeals: Meal[] = [
     { name: "Ahi tuna salad", ingredients: [] },
     { name: "Alfredo chicken", ingredients: [] },
     { name: "Alfredo meatballs", ingredients: [] },
@@ -133,12 +138,12 @@ const MealPlanner = () => {
   ];
 
   const [mealCount, setMealCount] = useState(7);
-  const [selectedMeals, setSelectedMeals] = useState([]);
+  const [selectedMeals, setSelectedMeals] = useState<Meal[]>([]);
   const [showGroceryList, setShowGroceryList] = useState(false);
-  const [allMeals, setAllMeals] = useState(sampleMeals);
+  const [allMeals, setAllMeals] = useState<Meal[]>(sampleMeals);
   const [showAddMeal, setShowAddMeal] = useState(false);
   const [newMealName, setNewMealName] = useState('');
-  const [newMealIngredients, setNewMealIngredients] = useState(['']);
+  const [newMealIngredients, setNewMealIngredients] = useState<string[]>(['']);
   const [editingMealIndex, setEditingMealIndex] = useState(-1);
   const [showMealList, setShowMealList] = useState(false);
 
@@ -148,20 +153,20 @@ const MealPlanner = () => {
   };
 
   // Remove an ingredient input field
-  const removeIngredientField = (index) => {
+  const removeIngredientField = (index: number) => {
     const filtered = newMealIngredients.filter((_, i) => i !== index);
     setNewMealIngredients(filtered.length > 0 ? filtered : ['']);
   };
 
   // Update ingredient at specific index
-  const updateIngredient = (index, value) => {
+  const updateIngredient = (index: number, value: string) => {
     const updated = [...newMealIngredients];
     updated[index] = value;
     setNewMealIngredients(updated);
   };
 
   // Start editing a meal
-  const startEditMeal = (index) => {
+  const startEditMeal = (index: number) => {
     const meal = allMeals[index];
     setNewMealName(meal.name);
     setNewMealIngredients(meal.ingredients.length > 0 ? meal.ingredients : ['']);
@@ -220,7 +225,7 @@ const MealPlanner = () => {
   };
 
   // Replace a specific meal
-  const replaceMeal = (index) => {
+  const replaceMeal = (index: number) => {
     const usedMealNames = selectedMeals.map(meal => meal.name);
     const availableMeals = allMeals.filter(meal => !usedMealNames.includes(meal.name));
     
@@ -235,7 +240,7 @@ const MealPlanner = () => {
   // Generate grocery list
   const generateGroceryList = () => {
     const allIngredients = selectedMeals.flatMap(meal => meal.ingredients);
-    const ingredientCount = {};
+    const ingredientCount: Record<string, number> = {};
     
     allIngredients.forEach(ingredient => {
       ingredientCount[ingredient] = (ingredientCount[ingredient] || 0) + 1;
